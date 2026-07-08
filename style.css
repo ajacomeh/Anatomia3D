@@ -1,0 +1,153 @@
+/* RESET */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+/* CUERPO */
+
+body{
+
+    font-family:Segoe UI, sans-serif;
+
+    background:#f1f5f9;
+
+    overflow:hidden;
+
+}
+
+/* ENCABEZADO */
+
+header{
+
+    height:70px;
+
+    background:#0f172a;
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:28px;
+
+    font-weight:bold;
+
+    box-shadow:0 3px 10px rgba(0,0,0,.25);
+
+}
+
+/* CONTENEDOR */
+
+#contenedor{
+
+    display:flex;
+
+    height:calc(100vh - 70px);
+
+}
+
+/* PANEL */
+
+#panel{
+
+    width:300px;
+
+    background:white;
+
+    border-right:1px solid #ddd;
+
+    padding:25px;
+
+}
+
+#panel h2{
+
+    margin-bottom:25px;
+
+    color:#1f2937;
+
+}
+
+#panel h3{
+
+    margin-top:30px;
+
+    margin-bottom:10px;
+
+}
+
+#panel p{
+
+    color:#666;
+
+    line-height:1.6;
+
+}
+
+#panel button{
+
+    width:100%;
+
+    padding:16px;
+
+    margin-bottom:15px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#2563eb;
+
+    color:white;
+
+    font-size:17px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+#panel button:hover{
+
+    background:#1d4ed8;
+
+}
+
+hr{
+
+    margin:20px 0;
+
+}
+
+/* VISOR */
+
+#visor3D{
+
+    flex:1;
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:#202124;
+
+    background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+
+    background-size:40px 40px;
+
+}
+
+canvas{
+
+    display:block;
+
+}
