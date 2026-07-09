@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Anatomía 3D</title>
+    <title>Proyecto Anatomía 3D</title>
 
     <link rel="stylesheet" href="style.css">
 
@@ -16,52 +16,62 @@
 
 <header>
 
-<h1>Proyecto Anatomía 3D</h1>
+    <h1>Proyecto Anatomía 3D</h1>
 
 </header>
 
-
 <div id="contenedor">
 
+    <aside id="panel">
 
-<aside id="panel">
+        <h2>Anatomía</h2>
 
-<h2>Anatomía</h2>
+        <button id="btnCompleto">
+            🧍 Cuerpo Completo
+        </button>
 
-<button id="btnHuesos">🦴 Sistema Óseo</button>
+        <button id="btnHuesos">
+            🦴 Sistema Óseo
+        </button>
 
-<button id="btnMusculos">💪 Sistema Muscular</button>
+        <button id="btnMusculos">
+            💪 Sistema Muscular
+        </button>
 
+        <button id="btnSkeleton">
+            💀 Skeleton Human
+        </button>
 
-<hr>
+        <hr>
 
+        <h3>Información</h3>
 
-<h3>Información</h3>
+        <div id="info">
 
-<p>
-Selecciona una estructura del cuerpo.
-</p>
+            Selecciona un hueso para ver su descripción.
 
+        </div>
 
-</aside>
+    </aside>
 
-
-<main id="visor3D"></main>
-
+    <main id="visor3D"></main>
 
 </div>
 
+<div id="firma">
 
-<!-- Librerías locales -->
+    Grupo #4
+
+</div>
+
 <script src="three.min.js"></script>
 
 <script src="GLTFLoader.js"></script>
 
 <script src="OrbitControls.js"></script>
 
-
-<!-- Código del proyecto -->
 <script src="script.js"></script>
+
 </body>
 
 </html>

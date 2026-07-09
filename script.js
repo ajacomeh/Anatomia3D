@@ -1,298 +1,774 @@
-// ==========================
-// CONTENEDOR
-// ==========================
+//====================================================
+// PROYECTO ANATOMÍA 3D
+//====================================================
+
 
 const visor = document.getElementById("visor3D");
 
-
-// ==========================
-// BOTONES
-// ==========================
-
-const btnHuesos = document.getElementById("btnHuesos");
-const btnMusculos = document.getElementById("btnMusculos");
+const info = document.getElementById("info");
 
 
-// ==========================
+//====================================================
 // ESCENA
-// ==========================
+//====================================================
 
-const scene = new THREE.Scene();
+const escena = new THREE.Scene();
 
-scene.background = new THREE.Color(0x202124);
+escena.background = new THREE.Color(0x202124);
 
 
-// ==========================
-// CÁMARA
-// ==========================
 
-const camera = new THREE.PerspectiveCamera(
-    45,
-    visor.clientWidth / visor.clientHeight,
-    0.1,
-    1000
+//====================================================
+// CAMARA
+//====================================================
+
+const camara = new THREE.PerspectiveCamera(
+
+45,
+
+visor.clientWidth / visor.clientHeight,
+
+0.1,
+
+1000
+
 );
 
-camera.position.set(0,1.5,6);
+
+camara.position.set(0,150,300);
 
 
-// ==========================
+
+//====================================================
 // RENDER
-// ==========================
+//====================================================
 
 const renderer = new THREE.WebGLRenderer({
-    antialias:true
+
+antialias:true
+
 });
 
-renderer.setSize(
-    visor.clientWidth,
-    visor.clientHeight
-);
 
 renderer.setPixelRatio(
-    window.devicePixelRatio
+window.devicePixelRatio
 );
 
-visor.appendChild(renderer.domElement);
+
+renderer.setSize(
+
+visor.clientWidth,
+
+visor.clientHeight
+
+);
 
 
-// ==========================
-// CONTROLES DEL MOUSE
-// ==========================
+visor.appendChild(
+renderer.domElement
+);
+
+
+
+//====================================================
+// CONTROLES
+//====================================================
 
 const controls = new THREE.OrbitControls(
-    camera,
-    renderer.domElement
+
+camara,
+
+renderer.domElement
+
 );
 
-controls.enableDamping = true;
-controls.enableZoom = true;
-controls.enablePan = false;
+
+controls.enableDamping=true;
+
+controls.dampingFactor=.05;
+
+controls.target.set(0,90,0);
 
 
-// ==========================
+
+//====================================================
 // LUCES
-// ==========================
+//====================================================
 
-scene.add(
-    new THREE.AmbientLight(0xffffff,2)
+const ambiental = new THREE.AmbientLight(
+
+0x212121,
+
+2.5
+
 );
 
 
-const luz = new THREE.DirectionalLight(
-    0xffffff,
-    3
+escena.add(
+ambiental
 );
 
-luz.position.set(5,10,5);
-
-scene.add(luz);
 
 
-// ==========================
-// CARGADOR
-// ==========================
+const direccional = new THREE.DirectionalLight(
+
+0x212121,
+
+3
+
+);
+
+
+direccional.position.set(
+
+200,
+
+300,
+
+200
+
+);
+
+
+escena.add(
+direccional
+);
+
+
+
+//====================================================
+// VARIABLES
+//====================================================
 
 const loader = new THREE.GLTFLoader();
 
 
-let cuerpo = null;
-let esqueleto = null;
-let musculos = null;
+let modelo=null;
 
 
-// ==========================
-// CUERPO INICIAL
-// ==========================
-
-loader.load(
-
-    "modelos/Cuerpo.glb",
-
-    function(gltf){
-
-        cuerpo = gltf.scene;
-
-        cuerpo.scale.set(
-            2.7,
-            2.7,
-            2.7
-        );
-
-        cuerpo.position.set(
-            0,
-            0.2,
-            0
-        );
-
-        scene.add(cuerpo);
-
-        console.log("Cuerpo cargado");
-
-    }
-
-);
+const raycaster = new THREE.Raycaster();
 
 
-// ==========================
-// ESQUELETO
-// ==========================
-
-loader.load(
-
-    "modelos/Esqueleto.glb",
-
-    function(gltf){
-
-        esqueleto = gltf.scene;
-
-        esqueleto.scale.set(
-            0.07,
-            0.07,
-            0.07
-        );
-
-        esqueleto.position.set(
-            0,
-            0.65,
-            0
-        );
-
-        scene.add(esqueleto);
-
-        esqueleto.visible = false;
-
-        console.log("Esqueleto cargado");
-
-    }
-
-);
+const mouse = new THREE.Vector2();
 
 
-// ==========================
-// MÚSCULOS
-// ==========================
-
-loader.load(
-
-    "modelos/Musculos.glb",
-
-    function(gltf){
-
-        musculos = gltf.scene;
-
-        musculos.scale.set(
-            0.0265,
-            0.0265,
-            0.0265
-        );
-
-        musculos.position.set(
-            0,
-            1,
-            0
-        );
-
-        scene.add(musculos);
-
-        musculos.visible = false;
-
-        console.log("Músculos cargados");
-
-    }
-
-);
+let seleccionado=null;
 
 
-// ==========================
+let colorAnterior=null;
+
+
+
+//====================================================
+// INFORMACION HUESOS
+//====================================================
+
+const informacion={
+
+
+"Cranium__0":{
+
+nombre:"Cráneo",
+
+descripcion:"Protege el encéfalo y forma la estructura de la cabeza."
+
+},
+
+
+"Mandible__0":{
+
+nombre:"Mandíbula",
+
+descripcion:"Único hueso móvil del cráneo."
+
+},
+
+
+"l_humerus__0":{
+
+nombre:"Húmero izquierdo",
+
+descripcion:"Hueso del brazo."
+
+},
+
+
+"r_humerus__0":{
+
+nombre:"Húmero derecho",
+
+descripcion:"Hueso del brazo."
+
+},
+
+
+"l_femur__0":{
+
+nombre:"Fémur izquierdo",
+
+descripcion:"Hueso más largo del cuerpo."
+
+},
+
+
+"r_femur__0":{
+
+nombre:"Fémur derecho",
+
+descripcion:"Hueso más largo del cuerpo."
+
+}
+
+
+};
+
+
+
+//====================================================
 // BOTONES
-// ==========================
+//====================================================
 
-btnHuesos.onclick = function(){
-
-    if(cuerpo) cuerpo.visible = false;
-
-    if(esqueleto) esqueleto.visible = true;
-
-    if(musculos) musculos.visible = false;
-
-};
+const btnCompleto =
+document.getElementById("btnCompleto");
 
 
-btnMusculos.onclick = function(){
-
-    if(cuerpo) cuerpo.visible = false;
-
-    if(esqueleto) esqueleto.visible = false;
-
-    if(musculos) musculos.visible = true;
-
-};
+const btnHuesos =
+document.getElementById("btnHuesos");
 
 
-// ==========================
-// ANIMACIÓN
-// ==========================
+const btnMusculos =
+document.getElementById("btnMusculos");
+
+
+const btnSkeleton =
+document.getElementById("btnSkeleton");
+
+
+
+//====================================================
+// CARGAR MODELOS
+//====================================================
+
+function cargarModelo(ruta){
+
+
+if(modelo){
+
+escena.remove(modelo);
+
+modelo=null;
+
+}
+
+
+
+loader.load(
+
+
+ruta,
+
+
+function(gltf){
+
+
+modelo=gltf.scene;
+
+
+escena.add(modelo);
+
+
+
+const caja = new THREE.Box3()
+.setFromObject(modelo);
+
+
+
+const centro = caja.getCenter(
+
+new THREE.Vector3()
+
+);
+
+
+
+modelo.position.sub(
+centro
+);
+
+
+
+const tamaño = caja.getSize(
+
+new THREE.Vector3()
+
+);
+
+
+
+const mayor=Math.max(
+
+tamaño.x,
+
+tamaño.y,
+
+tamaño.z
+
+);
+
+
+
+const escala=180/mayor;
+
+modelo.scale.setScalar(
+escala
+);
+
+if(ruta === "modelos/human_skeleton.glb"){
+
+
+    // ponerlo parado
+
+    modelo.rotation.x = 0;
+
+    modelo.rotation.y = 0;
+
+    modelo.rotation.z = Math.PI;
+
+
+
+    // posición
+
+    modelo.position.set(
+
+        0,
+
+        0,
+
+        0
+
+    );
+
+
+    // tamaño
+
+    modelo.scale.multiplyScalar(1.5);
+
+
+
+    // cámara enfocada al cuerpo
+
+    camara.position.set(
+
+        0,
+
+        500,
+
+        10
+
+    );
+
+
+    controls.target.set(
+
+        0,
+
+        100,
+
+        0
+
+    );
+
+
+}
+
+// CAMBIAR POSICION DEL MODELO
+
+modelo.position.set(
+
+0,
+
+100,
+
+30
+
+);
+
+
+console.log(
+"Modelo cargado:",
+ruta
+);
+
+
+},
+
+
+undefined,
+
+
+function(error){
+
+
+console.error(
+
+"Error cargando:",
+
+ruta,
+
+error
+
+);
+
+
+}
+
+
+);
+
+
+}//====================================================
+// EVENTOS BOTONES
+//====================================================
+
+
+btnCompleto.addEventListener(
+
+"click",
+
+function(){
+
+cargarModelo(
+
+"modelos/Cuerpo.glb"
+
+);
+
+}
+
+);
+
+
+
+btnHuesos.addEventListener(
+
+"click",
+
+function(){
+
+cargarModelo(
+
+"modelos/Esqueleto.glb"
+
+);
+
+}
+
+);
+
+
+
+btnMusculos.addEventListener(
+
+"click",
+
+function(){
+
+cargarModelo(
+
+"modelos/Musculos.glb"
+
+);
+
+}
+
+);
+
+
+
+btnSkeleton.addEventListener(
+
+"click",
+
+function(){
+
+cargarModelo(
+
+"modelos/human_skeleton.glb"
+
+);
+
+}
+
+);
+
+
+
+
+
+//====================================================
+// CLICK SOBRE HUESOS
+//====================================================
+
+window.addEventListener(
+
+"click",
+
+function(event){
+
+
+const rect =
+renderer.domElement.getBoundingClientRect();
+
+
+
+mouse.x =
+
+((event.clientX - rect.left) /
+
+rect.width) * 2 - 1;
+
+
+
+mouse.y =
+
+-((event.clientY - rect.top) /
+
+rect.height) * 2 + 1;
+
+
+
+raycaster.setFromCamera(
+
+mouse,
+
+camara
+
+);
+
+
+
+if(!modelo)return;
+
+
+
+const objetos=[];
+
+
+
+modelo.traverse(
+
+function(obj){
+
+
+if(obj.isMesh){
+
+objetos.push(obj);
+
+}
+
+
+}
+
+);
+
+
+
+const inter = raycaster.intersectObjects(
+
+objetos
+
+);
+
+
+
+if(inter.length===0)return;
+
+
+
+const objeto=inter[0].object;
+
+console.log("Hueso seleccionado:", objeto.name);
+
+
+
+if(seleccionado){
+
+
+if(colorAnterior){
+
+seleccionado.material.color.copy(
+
+colorAnterior
+
+);
+
+}
+
+
+}
+
+
+
+seleccionado=objeto;
+
+
+
+if(objeto.material && objeto.material.color){
+
+
+colorAnterior=
+
+objeto.material.color.clone();
+
+
+
+objeto.material.color.set(
+0x00ffff
+);
+
+
+}
+
+
+
+const nombre=objeto.name;
+
+
+
+let titulo = nombre;
+
+
+if(informacion[nombre]){
+
+titulo = informacion[nombre].nombre;
+
+}
+
+
+let texto =
+
+"<h2>"+titulo+"</h2>";
+
+
+
+if(informacion[nombre]){
+
+
+texto +=
+
+"<p><b>"+
+
+informacion[nombre].nombre+
+
+"</b></p>";
+
+
+
+texto +=
+
+"<p>"+
+
+informacion[nombre].descripcion+
+
+"</p>";
+
+
+}
+
+else{
+
+
+texto +=
+
+"<p>No hay información registrada para este hueso.</p>";
+
+}
+
+
+info.innerHTML=texto;
+
+
+
+}
+
+);
+
+
+
+
+
+//====================================================
+// ANIMACION
+//====================================================
 
 function animar(){
 
-    requestAnimationFrame(animar);
+
+requestAnimationFrame(
+animar
+);
 
 
-    controls.update();
+controls.update();
 
 
-    if(cuerpo){
+renderer.render(
 
-        cuerpo.rotation.y += 0.003;
+escena,
 
-    }
+camara
 
+);
 
-    if(esqueleto){
-
-        esqueleto.rotation.y += 0.003;
-
-    }
-
-
-    if(musculos){
-
-        musculos.rotation.y += 0.003;
-
-    }
-
-
-    renderer.render(
-        scene,
-        camera
-    );
 
 }
 
 
 animar();
 
+//====================================================
+// CARGAR MODELO INICIAL
+//====================================================
 
-// ==========================
+cargarModelo(
+"modelos/Cuerpo.glb"
+);
+
+
+
+//====================================================
 // RESPONSIVE
-// ==========================
+//====================================================
 
 window.addEventListener(
+
 "resize",
-()=>{
 
-    camera.aspect =
-    visor.clientWidth /
-    visor.clientHeight;
+function(){
 
 
-    camera.updateProjectionMatrix();
+camara.aspect=
+
+visor.clientWidth /
+
+visor.clientHeight;
 
 
-    renderer.setSize(
-        visor.clientWidth,
-        visor.clientHeight
-    );
 
-});
+camara.updateProjectionMatrix();
+
+
+
+renderer.setSize(
+
+visor.clientWidth,
+
+visor.clientHeight
+
+);
+
+
+
+}
+
+);
