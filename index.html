@@ -39,8 +39,16 @@
         </button>
 
         <button id="btnSkeleton">
-            💀 Skeleton Human
+            💀 Anatomía del Sistema Óseo
         </button>
+
+        <button id="btnBiomoleculas">
+    🧬 Biomoléculas del cuerpo
+</button>
+
+        <button id="btnElectronica">
+    ⚛️ Distribución electrónica
+</button>
 
         <hr>
 
@@ -56,6 +64,224 @@
 
     <main id="visor3D"></main>
 
+    <div id="panelKrebsLateral">
+
+    <h2>🔄 Ciclo de Krebs</h2>
+
+    <p>
+        El ciclo de Krebs transforma nutrientes en energía
+        utilizable por las células.
+    </p>
+
+    <div class="datoKrebs">
+
+        <h3>Entrada</h3>
+
+        <p>
+            Acetil-CoA proveniente de carbohidratos,
+            grasas y proteínas.
+        </p>
+
+    </div>
+
+    <div class="datoKrebs">
+
+        <h3>Productos</h3>
+
+        <p>
+            NADH, FADH₂, ATP y dióxido de carbono.
+        </p>
+
+    </div>
+
+    <div class="datoKrebs">
+
+        <h3>Relación con los músculos</h3>
+
+        <p>
+            El ATP permite la contracción muscular
+            y el movimiento del cuerpo.
+        </p>
+
+    </div>
+
+    <div class="datoKrebs">
+
+        <h3>Relación con los huesos</h3>
+
+        <p>
+            Las células óseas necesitan energía para
+            reparar y renovar el tejido óseo.
+        </p>
+
+    </div>
+
+    <div class="datoKrebs">
+
+        <h3>Relación con la respiración</h3>
+
+        <p>
+            El oxígeno permite producir más ATP
+            mediante la respiración celular.
+        </p>
+
+    </div>
+
+</div>
+
+    <div id="panelBiomoleculas">
+
+    <button id="btnRegresarBiomoleculas">
+        ← Regresar a Anatomía 3D
+    </button>
+
+    <h2>Biomoléculas del cuerpo humano</h2>
+
+    <p class="introduccionBiomoleculas">
+        Los elementos químicos se unen para formar biomoléculas.
+        Estas constituyen las células, tejidos, huesos, músculos
+        y demás estructuras del cuerpo.
+    </p>
+
+    <div class="contenedorBiomoleculas">
+
+        <article class="tarjetaBiomolecula">
+
+            <h3>🥩 Proteínas</h3>
+
+            <p>
+                Están formadas principalmente por carbono, hidrógeno,
+                oxígeno y nitrógeno.
+            </p>
+
+            <p>
+                <b>Relación con el sistema muscular:</b>
+                la actina y la miosina permiten la contracción muscular.
+            </p>
+
+            <p>
+                <b>Relación con el sistema óseo:</b>
+                el colágeno aporta flexibilidad y resistencia a los huesos.
+            </p>
+
+        </article>
+
+        <article class="tarjetaBiomolecula">
+
+            <h3>🍞 Carbohidratos</h3>
+
+            <p>
+                Son la principal fuente rápida de energía para las células.
+            </p>
+
+            <p>
+                <b>Relación con los músculos:</b>
+                la glucosa proporciona energía para el movimiento.
+            </p>
+
+            <p>
+                El glucógeno almacena glucosa principalmente en músculos
+                e hígado.
+            </p>
+
+        </article>
+
+        <article class="tarjetaBiomolecula">
+
+            <h3>🥑 Lípidos</h3>
+
+            <p>
+                Funcionan como reserva de energía y forman parte de
+                las membranas celulares.
+            </p>
+
+            <p>
+                Protegen órganos, aíslan térmicamente el cuerpo
+                y participan en la producción de algunas hormonas.
+            </p>
+
+        </article>
+
+        <article class="tarjetaBiomolecula">
+
+            <h3>🧬 Ácidos nucleicos</h3>
+
+            <p>
+                El ADN almacena la información genética y el ARN participa
+                en la fabricación de proteínas.
+            </p>
+
+            <p>
+                Controlan la formación, reparación y funcionamiento
+                de los tejidos del cuerpo.
+            </p>
+
+        </article>
+
+        <article class="tarjetaBiomolecula">
+
+            <h3>💧 Agua</h3>
+
+            <p>
+                Es la biomolécula más abundante del organismo.
+            </p>
+
+            <p>
+                Transporta sustancias, regula la temperatura y permite
+                reacciones químicas dentro de las células.
+            </p>
+
+        </article>
+
+        <article class="tarjetaBiomolecula">
+
+            <h3>🦴 Sales minerales</h3>
+
+            <p>
+                El calcio y el fósforo forman parte de la estructura
+                mineral de los huesos y los dientes.
+            </p>
+
+            <p>
+                El calcio también participa en la contracción muscular
+                y en la transmisión de señales celulares.
+            </p>
+
+        </article>
+
+    </div>
+
+</div>
+
+<div id="panelElectronico">
+
+    <button id="btnRegresar">
+    ← Regresar a Anatomía 3D
+</button>
+
+    <h2>Distribución electrónica</h2>
+
+    <p>
+        Selecciona un elemento químico.
+    </p>
+
+    <select id="selectorElemento">
+
+        <option value="H">Hidrógeno</option>
+        <option value="C">Carbono</option>
+        <option value="O">Oxígeno</option>
+        <option value="Na">Sodio</option>
+        <option value="Cl">Cloro</option>
+        <option value="Ca">Calcio</option>
+
+    </select>
+
+    <div id="informacionElemento"></div>
+
+    <div id="atomo"></div>
+
+</div>
+
 </div>
 
 <div id="firma">
@@ -69,6 +295,8 @@
 <script src="GLTFLoader.js"></script>
 
 <script src="OrbitControls.js"></script>
+
+<script src="informacion.js"></script>
 
 <script src="script.js"></script>
 

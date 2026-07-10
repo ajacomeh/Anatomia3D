@@ -35,7 +35,7 @@ visor.clientWidth / visor.clientHeight,
 );
 
 
-camara.position.set(0,150,300);
+camara.position.set(-35,150,320);
 
 
 
@@ -87,7 +87,7 @@ controls.enableDamping=true;
 
 controls.dampingFactor=.05;
 
-controls.target.set(0,90,0);
+controls.target.set(-30,90,0);
 
 
 
@@ -145,6 +145,7 @@ const loader = new THREE.GLTFLoader();
 
 let modelo=null;
 
+let modeloInteractivo = false;
 
 const raycaster = new THREE.Raycaster();
 
@@ -156,71 +157,6 @@ let seleccionado=null;
 
 
 let colorAnterior=null;
-
-
-
-//====================================================
-// INFORMACION HUESOS
-//====================================================
-
-const informacion={
-
-
-"Cranium__0":{
-
-nombre:"Cráneo",
-
-descripcion:"Protege el encéfalo y forma la estructura de la cabeza."
-
-},
-
-
-"Mandible__0":{
-
-nombre:"Mandíbula",
-
-descripcion:"Único hueso móvil del cráneo."
-
-},
-
-
-"l_humerus__0":{
-
-nombre:"Húmero izquierdo",
-
-descripcion:"Hueso del brazo."
-
-},
-
-
-"r_humerus__0":{
-
-nombre:"Húmero derecho",
-
-descripcion:"Hueso del brazo."
-
-},
-
-
-"l_femur__0":{
-
-nombre:"Fémur izquierdo",
-
-descripcion:"Hueso más largo del cuerpo."
-
-},
-
-
-"r_femur__0":{
-
-nombre:"Fémur derecho",
-
-descripcion:"Hueso más largo del cuerpo."
-
-}
-
-
-};
 
 
 
@@ -243,6 +179,319 @@ document.getElementById("btnMusculos");
 const btnSkeleton =
 document.getElementById("btnSkeleton");
 
+const btnBiomoleculas =
+document.getElementById("btnBiomoleculas");
+
+const panelBiomoleculas =
+document.getElementById("panelBiomoleculas");
+
+const btnRegresarBiomoleculas =
+document.getElementById("btnRegresarBiomoleculas");
+
+//====================================================
+// ABRIR BIOMOLÉCULAS
+//====================================================
+
+btnBiomoleculas.addEventListener("click",function(){
+
+    if(modelo){
+
+        modelo.visible=false;
+
+    }
+
+    renderer.domElement.style.display="none";
+
+    panelElectronico.style.display="none";
+
+    panelBiomoleculas.style.display="block";
+
+    info.innerHTML=
+    "Estudia cómo las biomoléculas forman y mantienen las estructuras del cuerpo.";
+
+});
+
+
+//====================================================
+// REGRESAR DESDE BIOMOLÉCULAS
+//====================================================
+
+btnRegresarBiomoleculas.addEventListener("click",function(){
+
+    panelBiomoleculas.style.display="none";
+
+    renderer.domElement.style.display="block";
+
+    if(modelo){
+
+        modelo.visible=true;
+
+    }
+
+    info.innerHTML=
+    "Selecciona un hueso para ver su descripción.";
+
+});
+
+
+//====================================================
+// DISTRIBUCIÓN ELECTRÓNICA
+//====================================================
+
+const btnElectronica =
+document.getElementById("btnElectronica");
+
+const panelElectronico =
+document.getElementById("panelElectronico");
+
+const selectorElemento =
+document.getElementById("selectorElemento");
+
+const informacionElemento =
+document.getElementById("informacionElemento");
+
+const atomo =
+document.getElementById("atomo");
+
+const btnRegresar =
+document.getElementById("btnRegresar");
+
+//====================================================
+// BOTÓN REGRESAR
+//====================================================
+
+btnRegresar.addEventListener("click",function(){
+
+    // Ocultar distribución electrónica
+
+    panelElectronico.style.display="none";
+
+
+    // Mostrar nuevamente el visor 3D
+
+    renderer.domElement.style.display="block";
+
+
+    // Mostrar el modelo anterior
+
+    if(modelo){
+
+        modelo.visible=true;
+
+    }
+
+
+    // Restaurar información
+
+    info.innerHTML=
+    "Selecciona un hueso para ver su descripción.";
+
+
+    // Actualizar el tamaño del visor
+
+    camara.aspect=
+
+    visor.clientWidth /
+
+    visor.clientHeight;
+
+
+    camara.updateProjectionMatrix();
+
+
+    renderer.setSize(
+
+    visor.clientWidth,
+
+    visor.clientHeight
+
+    );
+
+});
+
+
+const elementos={
+
+"H":{
+
+nombre:"Hidrógeno",
+
+numeroAtomico:1,
+
+configuracion:"1s¹",
+
+niveles:[1]
+
+},
+
+"C":{
+
+nombre:"Carbono",
+
+numeroAtomico:6,
+
+configuracion:"1s² 2s² 2p²",
+
+niveles:[2,4]
+
+},
+
+"O":{
+
+nombre:"Oxígeno",
+
+numeroAtomico:8,
+
+configuracion:"1s² 2s² 2p⁴",
+
+niveles:[2,6]
+
+},
+
+"Na":{
+
+nombre:"Sodio",
+
+numeroAtomico:11,
+
+configuracion:"1s² 2s² 2p⁶ 3s¹",
+
+niveles:[2,8,1]
+
+},
+
+"Cl":{
+
+nombre:"Cloro",
+
+numeroAtomico:17,
+
+configuracion:"1s² 2s² 2p⁶ 3s² 3p⁵",
+
+niveles:[2,8,7]
+
+},
+
+"Ca":{
+
+nombre:"Calcio",
+
+numeroAtomico:20,
+
+configuracion:"1s² 2s² 2p⁶ 3s² 3p⁶ 4s²",
+
+niveles:[2,8,8,2]
+
+
+}
+
+};
+
+function dibujarAtomo(simbolo){
+
+    const elemento=elementos[simbolo];
+
+    atomo.innerHTML="";
+
+    const nucleo=document.createElement("div");
+
+    nucleo.className="nucleo";
+
+    nucleo.textContent=simbolo;
+
+    atomo.appendChild(nucleo);
+
+
+    elemento.niveles.forEach(function(cantidad,nivelIndice){
+
+        const diametro=130+(nivelIndice*65);
+
+        const nivel=document.createElement("div");
+
+        nivel.className="nivel";
+
+        nivel.style.width=diametro+"px";
+
+        nivel.style.height=diametro+"px";
+
+        atomo.appendChild(nivel);
+
+
+        for(let i=0;i<cantidad;i++){
+
+            const angulo=(360/cantidad)*i;
+
+            const radio=diametro/2;
+
+            const radianes=angulo*Math.PI/180;
+
+            const electron=document.createElement("div");
+
+            electron.className="electron";
+
+            electron.style.left=
+            175+(Math.cos(radianes)*radio)+"px";
+
+            electron.style.top=
+            175+(Math.sin(radianes)*radio)+"px";
+
+            atomo.appendChild(electron);
+
+        }
+
+    });
+
+}
+
+function mostrarElemento(){
+
+    const simbolo=selectorElemento.value;
+
+    const elemento=elementos[simbolo];
+
+    informacionElemento.innerHTML=
+
+    "<h3>"+elemento.nombre+"</h3>"+
+
+    "<p><b>Símbolo:</b> "+simbolo+"</p>"+
+
+    "<p><b>Número atómico:</b> "+
+    elemento.numeroAtomico+"</p>"+
+
+    "<p><b>Configuración electrónica:</b> "+
+    elemento.configuracion+"</p>"+
+
+    "<p><b>Electrones por nivel:</b> "+
+    elemento.niveles.join(" - ")+"</p>";
+
+    dibujarAtomo(simbolo);
+
+}
+
+btnElectronica.addEventListener("click",function(){
+
+    if(modelo){
+
+        modelo.visible=false;
+
+    }
+
+    renderer.domElement.style.display="none";
+
+    panelElectronico.style.display="block";
+
+    info.innerHTML=
+    "Selecciona un elemento para estudiar su distribución electrónica.";
+
+    mostrarElemento();
+
+});
+
+selectorElemento.addEventListener(
+"change",
+mostrarElemento
+);
+
 
 
 //====================================================
@@ -251,12 +500,23 @@ document.getElementById("btnSkeleton");
 
 function cargarModelo(ruta){
 
+    if(panelBiomoleculas){
+
+    panelBiomoleculas.style.display="none";
+
+}
+
+panelElectronico.style.display="none";
+
+renderer.domElement.style.display="block";
 
 if(modelo){
 
 escena.remove(modelo);
 
 modelo=null;
+
+modeloInteractivo = false;
 
 }
 
@@ -273,10 +533,46 @@ function(gltf){
 
 modelo=gltf.scene;
 
+//====================================================
+// MATERIAL INDIVIDUAL PARA CADA HUESO
+//====================================================
+
+if(ruta === "modelos/human_skeleton.glb"){
+
+    modelo.traverse(function(obj){
+
+        if(obj.isMesh){
+
+            // Crear una copia independiente del material
+            obj.material = obj.material.clone();
+
+        }
+
+    });
+
+}
 
 escena.add(modelo);
 
+let lista = [];
 
+modelo.traverse(function(obj){
+
+    if(obj.isMesh){
+
+        lista.push(obj.name);
+
+    }
+
+});
+
+console.log(lista.join("\n"));
+
+if(ruta === "modelos/human_skeleton.glb"){
+
+    modeloInteractivo = true;
+
+}
 
 const caja = new THREE.Box3()
 .setFromObject(modelo);
@@ -547,7 +843,7 @@ camara
 
 
 
-if(!modelo)return;
+if(!modelo || !modeloInteractivo)return;
 
 
 
