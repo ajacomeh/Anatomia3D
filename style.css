@@ -22,15 +22,17 @@ body{
 
 }
 
-/*======================================================
-HEADER
-======================================================*/
-
 header{
 
     height:70px;
 
-    background:#0f172a;
+    background:linear-gradient(
+        90deg,
+        #bfdbfe 0%,
+        #93c5fd 30%,
+        #60a5fa 60%,
+        #2563eb 100%
+    );
 
     color:white;
 
@@ -44,7 +46,7 @@ header{
 
     font-weight:bold;
 
-    box-shadow:0 3px 10px rgba(0,0,0,.3);
+    box-shadow:0 3px 12px rgba(30,64,175,.3);
 
 }
 
@@ -755,5 +757,316 @@ PANEL LATERAL CICLO DE KREBS
     line-height:1.5;
 
     font-size:14px;
+
+}
+
+/*======================================================
+ANIMACIÓN BOTONES REGRESAR
+======================================================*/
+
+#btnRegresar,
+#btnRegresarBiomoleculas{
+
+    position:relative;
+
+    overflow:hidden;
+
+    transition:
+        transform .25s ease,
+        background .25s ease,
+        box-shadow .25s ease;
+
+}
+
+
+/* EFECTO AL PASAR EL MOUSE */
+
+#btnRegresar:hover,
+#btnRegresarBiomoleculas:hover{
+
+    transform:translateX(-5px);
+
+    box-shadow:0 5px 15px rgba(37,99,235,.4);
+
+}
+
+
+/* EFECTO AL PRESIONAR */
+
+#btnRegresar:active,
+#btnRegresarBiomoleculas:active{
+
+    transform:scale(.94);
+
+}
+
+
+/* ONDA AL HACER CLICK */
+
+#btnRegresar::after,
+#btnRegresarBiomoleculas::after{
+
+    content:"";
+
+    position:absolute;
+
+    top:50%;
+
+    left:50%;
+
+    width:0;
+
+    height:0;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.35);
+
+    transform:translate(-50%,-50%);
+
+    transition:
+        width .45s ease,
+        height .45s ease;
+
+}
+
+#btnRegresar:active::after,
+#btnRegresarBiomoleculas:active::after{
+
+    width:300px;
+
+    height:300px;
+
+}
+
+
+/*======================================================
+ANIMACIÓN PARA REGRESAR AL VISOR 3D
+======================================================*/
+
+.visorEntrada{
+
+    animation:entradaVisor .65s ease;
+
+}
+
+@keyframes entradaVisor{
+
+    from{
+
+        opacity:0;
+
+        transform:scale(.96);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:scale(1);
+
+    }
+
+}
+
+/*======================================================
+ANIMACIÓN DE ENTRADA DE PANELES
+======================================================*/
+
+.panelEntrada{
+
+    animation:mostrarPanel .55s ease;
+
+}
+
+@keyframes mostrarPanel{
+
+    from{
+
+        opacity:0;
+
+        transform:scale(.96) translateY(20px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:scale(1) translateY(0);
+
+    }
+
+}
+
+
+/* ANIMACIÓN DE TARJETAS DE BIOMOLÉCULAS */
+
+.tarjetaBiomolecula{
+
+    opacity:0;
+
+    transform:translateY(25px);
+
+}
+
+#panelBiomoleculas.panelEntrada .tarjetaBiomolecula{
+
+    animation:entradaTarjeta .5s ease forwards;
+
+}
+
+#panelBiomoleculas.panelEntrada
+.tarjetaBiomolecula:nth-child(1){
+
+    animation-delay:.08s;
+
+}
+
+#panelBiomoleculas.panelEntrada
+.tarjetaBiomolecula:nth-child(2){
+
+    animation-delay:.16s;
+
+}
+
+#panelBiomoleculas.panelEntrada
+.tarjetaBiomolecula:nth-child(3){
+
+    animation-delay:.24s;
+
+}
+
+#panelBiomoleculas.panelEntrada
+.tarjetaBiomolecula:nth-child(4){
+
+    animation-delay:.32s;
+
+}
+
+#panelBiomoleculas.panelEntrada
+.tarjetaBiomolecula:nth-child(5){
+
+    animation-delay:.40s;
+
+}
+
+#panelBiomoleculas.panelEntrada
+.tarjetaBiomolecula:nth-child(6){
+
+    animation-delay:.48s;
+
+}
+
+@keyframes entradaTarjeta{
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+
+/* ANIMACIÓN DEL ÁTOMO */
+
+#panelElectronico.panelEntrada #atomo{
+
+    animation:entradaAtomo .7s ease;
+
+}
+
+@keyframes entradaAtomo{
+
+    from{
+
+        opacity:0;
+
+        transform:scale(.65) rotate(-15deg);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:scale(1) rotate(0);
+
+    }
+
+}
+
+
+/* PULSO DEL NÚCLEO */
+
+.nucleo{
+
+    animation:pulsoNucleo 1.8s ease-in-out infinite;
+
+}
+
+@keyframes pulsoNucleo{
+
+    0%,100%{
+
+        transform:translate(-50%,-50%) scale(1);
+
+    }
+
+    50%{
+
+        transform:translate(-50%,-50%) scale(1.12);
+
+    }
+
+}
+
+
+/* EFECTO AL HACER CLICK EN BOTONES */
+
+#btnElectronica,
+#btnBiomoleculas{
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+#btnElectronica::after,
+#btnBiomoleculas::after{
+
+    content:"";
+
+    position:absolute;
+
+    top:50%;
+
+    left:50%;
+
+    width:0;
+
+    height:0;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.35);
+
+    transform:translate(-50%,-50%);
+
+    transition:width .45s,height .45s;
+
+}
+
+#btnElectronica:active::after,
+#btnBiomoleculas:active::after{
+
+    width:320px;
+
+    height:320px;
 
 }

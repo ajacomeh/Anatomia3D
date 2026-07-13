@@ -64,68 +64,79 @@
 
     <main id="visor3D"></main>
 
-    <div id="panelKrebsLateral">
+<div id="panelKrebsLateral">
 
     <h2>🔄 Ciclo de Krebs</h2>
 
-    <p>
-        El ciclo de Krebs transforma nutrientes en energía
-        utilizable por las células.
+    <p class="introKrebs">
+        Observa cómo los nutrientes se transforman en energía
+        para músculos, huesos y órganos.
     </p>
 
-    <div class="datoKrebs">
+    <div class="botonesKrebs">
 
-        <h3>Entrada</h3>
+        <button class="btnPasoKrebs activo" data-paso="entrada">
+            1. Entrada
+        </button>
 
-        <p>
-            Acetil-CoA proveniente de carbohidratos,
-            grasas y proteínas.
-        </p>
+        <button class="btnPasoKrebs" data-paso="ciclo">
+            2. Ciclo
+        </button>
 
-    </div>
+        <button class="btnPasoKrebs" data-paso="energia">
+            3. Energía
+        </button>
 
-    <div class="datoKrebs">
-
-        <h3>Productos</h3>
-
-        <p>
-            NADH, FADH₂, ATP y dióxido de carbono.
-        </p>
-
-    </div>
-
-    <div class="datoKrebs">
-
-        <h3>Relación con los músculos</h3>
-
-        <p>
-            El ATP permite la contracción muscular
-            y el movimiento del cuerpo.
-        </p>
+        <button class="btnPasoKrebs" data-paso="anatomia">
+            4. Anatomía
+        </button>
 
     </div>
 
-    <div class="datoKrebs">
+    <div id="visualKrebs">
 
-        <h3>Relación con los huesos</h3>
+        <div class="orbitaKrebs">
 
-        <p>
-            Las células óseas necesitan energía para
-            reparar y renovar el tejido óseo.
-        </p>
+            <div class="centroKrebs">
+                ATP
+            </div>
+
+            <div class="moleculaKrebs molecula1">
+                NADH
+            </div>
+
+            <div class="moleculaKrebs molecula2">
+                FADH₂
+            </div>
+
+            <div class="moleculaKrebs molecula3">
+                CO₂
+            </div>
+
+            <div class="moleculaKrebs molecula4">
+                Acetil-CoA
+            </div>
+
+        </div>
 
     </div>
 
-    <div class="datoKrebs">
+    <div id="contenidoKrebs">
 
-        <h3>Relación con la respiración</h3>
+        <h3>Entrada al ciclo</h3>
 
         <p>
-            El oxígeno permite producir más ATP
-            mediante la respiración celular.
+            Los carbohidratos, lípidos y proteínas pueden producir
+            acetil-CoA, que entra al ciclo de Krebs.
         </p>
 
+        <div class="conexionAnatomica">
+            🧬 Biomoléculas → Acetil-CoA
+        </div>
+
     </div>
+
+</div>
 
 </div>
 

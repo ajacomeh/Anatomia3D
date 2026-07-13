@@ -14,9 +14,6 @@ const info = document.getElementById("info");
 
 const escena = new THREE.Scene();
 
-escena.background = new THREE.Color(0x202124);
-
-
 
 //====================================================
 // CAMARA
@@ -45,9 +42,13 @@ camara.position.set(-35,150,320);
 
 const renderer = new THREE.WebGLRenderer({
 
-antialias:true
+    antialias:true,
+
+    alpha:true
 
 });
+
+renderer.setClearColor(0x000000, 0);
 
 
 renderer.setPixelRatio(
@@ -158,6 +159,26 @@ let seleccionado=null;
 
 let colorAnterior=null;
 
+function animarPanel(panel){
+
+    panel.classList.remove("panelEntrada");
+
+    void panel.offsetWidth;
+
+    panel.classList.add("panelEntrada");
+
+}
+
+function animarRegreso(){
+
+    renderer.domElement.classList.remove("visorEntrada");
+
+    void renderer.domElement.offsetWidth;
+
+    renderer.domElement.classList.add("visorEntrada");
+
+}
+
 
 
 //====================================================
@@ -206,11 +227,12 @@ btnBiomoleculas.addEventListener("click",function(){
 
     panelBiomoleculas.style.display="block";
 
+    animarPanel(panelBiomoleculas);
+
     info.innerHTML=
-    "Estudia cómo las biomoléculas forman y mantienen las estructuras del cuerpo.";
+    "Estudia cómo las biomoléculas forman y mantienen el cuerpo humano.";
 
 });
-
 
 //====================================================
 // REGRESAR DESDE BIOMOLÉCULAS
@@ -218,15 +240,31 @@ btnBiomoleculas.addEventListener("click",function(){
 
 btnRegresarBiomoleculas.addEventListener("click",function(){
 
+    // Ocultar biomoléculas
+
     panelBiomoleculas.style.display="none";
 
+
+    // Mostrar visor 3D
+
     renderer.domElement.style.display="block";
+
+
+    // Mostrar modelo
 
     if(modelo){
 
         modelo.visible=true;
 
     }
+
+
+    // Animación de regreso
+
+    animarRegreso();
+
+
+    // Restaurar información
 
     info.innerHTML=
     "Selecciona un hueso para ver su descripción.";
@@ -262,17 +300,17 @@ document.getElementById("btnRegresar");
 
 btnRegresar.addEventListener("click",function(){
 
-    // Ocultar distribución electrónica
+    // Ocultar panel electrónico
 
     panelElectronico.style.display="none";
 
 
-    // Mostrar nuevamente el visor 3D
+    // Mostrar visor 3D
 
     renderer.domElement.style.display="block";
 
 
-    // Mostrar el modelo anterior
+    // Mostrar modelo
 
     if(modelo){
 
@@ -281,31 +319,15 @@ btnRegresar.addEventListener("click",function(){
     }
 
 
+    // Animación de regreso
+
+    animarRegreso();
+
+
     // Restaurar información
 
     info.innerHTML=
     "Selecciona un hueso para ver su descripción.";
-
-
-    // Actualizar el tamaño del visor
-
-    camara.aspect=
-
-    visor.clientWidth /
-
-    visor.clientHeight;
-
-
-    camara.updateProjectionMatrix();
-
-
-    renderer.setSize(
-
-    visor.clientWidth,
-
-    visor.clientHeight
-
-    );
 
 });
 
@@ -466,6 +488,12 @@ function mostrarElemento(){
 
     dibujarAtomo(simbolo);
 
+atomo.classList.remove("panelEntrada");
+
+void atomo.offsetWidth;
+
+atomo.classList.add("panelEntrada");
+
 }
 
 btnElectronica.addEventListener("click",function(){
@@ -478,7 +506,11 @@ btnElectronica.addEventListener("click",function(){
 
     renderer.domElement.style.display="none";
 
+    panelBiomoleculas.style.display="none";
+
     panelElectronico.style.display="block";
+
+    animarPanel(panelElectronico);
 
     info.innerHTML=
     "Selecciona un elemento para estudiar su distribución electrónica.";
@@ -486,7 +518,6 @@ btnElectronica.addEventListener("click",function(){
     mostrarElemento();
 
 });
-
 selectorElemento.addEventListener(
 "change",
 mostrarElemento
@@ -1068,3 +1099,104 @@ visor.clientHeight
 }
 
 );
+
+//====================================================
+// CICLO DE KREBS INTERACTIVO
+//====================================================
+
+const botonesKrebs =
+document.querySelectorAll(".btnPasoKrebs");
+
+const contenidoKrebs =
+document.getElementById("contenidoKrebs");
+
+
+const pasosKrebs={
+
+entrada:{
+
+titulo:"Entrada al ciclo",
+
+texto:
+"Los carbohidratos, lípidos y proteínas se degradan hasta formar acetil-CoA, que entra en la mitocondria.",
+
+conexion:
+"🧬 Biomoléculas → Acetil-CoA"
+
+},
+
+ciclo:{
+
+titulo:"Reacciones del ciclo",
+
+texto:
+"El acetil-CoA se combina con oxaloacetato. Durante las reacciones se producen NADH, FADH₂ y dióxido de carbono.",
+
+conexion:
+"⚛️ Enlaces químicos → Reacciones metabólicas"
+
+},
+
+energia:{
+
+titulo:"Producción de energía",
+
+texto:
+"El NADH y el FADH₂ transportan electrones hacia la cadena respiratoria, donde se produce ATP.",
+
+conexion:
+"⚡ ATP → Energía celular"
+
+},
+
+anatomia:{
+
+titulo:"Relación con la anatomía",
+
+texto:
+"Los músculos usan ATP para contraerse, las células óseas para reparar tejido y los órganos para mantener sus funciones.",
+
+conexion:
+"💪 Músculos · 🦴 Huesos · 🫀 Órganos"
+
+}
+
+};
+
+botonesKrebs.forEach(function(boton){
+
+    boton.addEventListener("click",function(){
+
+        botonesKrebs.forEach(function(btn){
+
+            btn.classList.remove("activo");
+
+        });
+
+        boton.classList.add("activo");
+
+        const paso=boton.dataset.paso;
+
+        const datos=pasosKrebs[paso];
+
+        contenidoKrebs.classList.remove("animando");
+
+        void contenidoKrebs.offsetWidth;
+
+        contenidoKrebs.innerHTML=
+
+        "<h3>"+datos.titulo+"</h3>"+
+
+        "<p>"+datos.texto+"</p>"+
+
+        "<div class='conexionAnatomica'>"+
+
+        datos.conexion+
+
+        "</div>";
+
+        contenidoKrebs.classList.add("animando");
+
+    });
+
+});
